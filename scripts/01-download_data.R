@@ -15,10 +15,10 @@ library(tidyverse)
 
 #### Download data ####
 # get package
-package <- show_package("e28bc818-43d5-43f7-b5d9-bdfb4eda5feb")
+package <- show_package("8171f7ab-364e-46a7-8a62-08f073ca6d96")
 
 # get all resources for this package
-resources <- list_package_resources("e28bc818-43d5-43f7-b5d9-bdfb4eda5feb")
+resources <- list_package_resources("8171f7ab-364e-46a7-8a62-08f073ca6d96")
 
 # identify datastore resources; by default, Toronto Open Data sets datastore resource format to CSV for non-geospatial and GeoJSON for geospatial resources
 datastore_resources <- filter(resources, tolower(format) %in% c('csv', 'geojson'))
