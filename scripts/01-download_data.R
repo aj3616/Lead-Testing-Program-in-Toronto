@@ -21,13 +21,12 @@ package <- show_package("8171f7ab-364e-46a7-8a62-08f073ca6d96")
 resources <- list_package_resources("8171f7ab-364e-46a7-8a62-08f073ca6d96")
 
 # identify datastore resources; by default, Toronto Open Data sets datastore resource format to CSV for non-geospatial and GeoJSON for geospatial resources
-datastore_resources <- filter(resources, tolower(format) %in% c('csv', 'geojson'))
+datastore_resources <- filter(resources, tolower(format) %in% c("csv", "geojson"))
 
 # load the first datastore resource as a sample
-data <- filter(datastore_resources, row_number()==1) %>% 
+data <- filter(datastore_resources, row_number() == 1) %>%
   get_resource()
 
 
 #### Save data ####
-write_csv(data, "data/raw_data/raw_data.csv") 
-
+write_csv(data, "data/raw_data/raw_data.csv")
