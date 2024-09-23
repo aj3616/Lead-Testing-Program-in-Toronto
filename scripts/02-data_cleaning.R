@@ -9,18 +9,23 @@
 
 #### Workspace setup ####
 library(tidyverse)
+library(tidyr)
+
 
 #### Clean data ####
 raw_data <- read_csv("data/raw_data/raw_data.csv")
-
-cleaned_data <-
-  raw_data |>
-  janitor::clean_names() |> 
-  separate(col = time_period,
-            into = c("year", "month"),
-            sep = "-") |> 
-  mutate(date = lubridate::ymd(paste(year, month, "01", sep = "-"))
-         )
+raw_data$`Lead Amount (ppm)` = as.numeric(raw_data$`Lead Amount (ppm)`)
+cleaned_data = na.omit(raw_data)
+cleaned_data = drop_na(cleaned_data)
+#cleaned_data <-
+ # raw_data |>
+  #janitor::clean_names() |> 
+ # separate(col = raw_data$`Sample Date`,
+  #          into = c("year", "month"),
+   #         sep = "-") |> 
+#  mutate(date = lubridate::ymd(paste(year, month, "01", sep = "-"))
+ #        )
   
 #### Save data ####
 write_csv(cleaned_data, "data/analysis_data/analysis_data.csv")
+

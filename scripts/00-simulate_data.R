@@ -20,14 +20,27 @@ start_date <- as.Date("2014-01-01")
 end_date <- as.Date("2024-08-21")
 
 # Set the number of random dates you want to generate
-number_of_dates <- 100
+n <- 100
 
 data_ppm = read_csv("data/raw_data/raw_data.csv")
 leadaAmountPpm = as.numeric(data_ppm$`Lead Amount (ppm)`)
 mean_lead <- mean(leadaAmountPpm, na.rm = TRUE)
 
+id <- 1:n
+sample_number <- sample(1000000:2000000, n, replace = TRUE)
+sample_date <- sample(seq(start_date, end_date, by = "day"), n, replace = TRUE)
+
+partial_postal_codes <- c("M1L", "M4E", "M4K", "M3B", "M6H", "M4J", "M4M", "M4G", "M6E", "M6P", "M6N", "M2M", "M9B", "M6J")
+partial_postal_code <- sample(partial_postal_codes, n, replace = TRUE)
+
+
 data <-
   tibble(
+    id = id,
+    sample_number = sample_number,
+    sample_date = sample_date,
+    partial_postal_code = partial_postal_code,
+    sample_number = 
     dates = as.Date(
       runif(
         n = number_of_dates,
@@ -37,6 +50,7 @@ data <-
       origin = "2014-01-01"
     ),
     leadAmountppm = rgamma(n = number_of_dates, shape = 2, rate = 1 / mean_lead)
+    
     #leadAmountppm = rpois(n = number_of_dates, lambda = mean_lead)
   )
 
