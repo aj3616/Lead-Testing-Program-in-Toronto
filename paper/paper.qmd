@@ -1,15 +1,18 @@
 ---
-title: "Marriage Licence Analysis"
-subtitle: "STA304 In-class 3"
+title: "Non-Regulated Residential Lead Testing Program in Toronto"
+subtitle: "Lead Contamination in Water"
 author: 
   - Amy Jin
-thanks: "Code and data are available at: https://github.com/aj3616/STA304IC3"
+thanks: "Code and data are available at: https://github.com/aj3616/Lead-Testing-Program-in-Toronto"
 date: today
 date-format: long
-abstract: "Data analysis for marrige licence statistics. Graphs and text produced in quarto"
+abstract: "The City of Toronto offers a free, non-regulated Residential Lead Testing Program, enabling residents to collect and submit water samples for lead testing. Quality of drinking water is an important public health issue. This paper examines how time and district affects the lead concentration with respect to safe lead concentration guidelines. It also highlights ongoing steps being taken to mitigate lead contamination in the water supply."
 format: pdf
 number-sections: true
 bibliography: references.bib
+editor: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r}
@@ -18,70 +21,249 @@ bibliography: references.bib
 #| message: false
 
 library(tidyverse)
+library(ggplot2)
 
 data <- read_csv(here::here("data/analysis_data/analysis_data.csv"))
+lead = data$`Lead Amount (ppm)`
 
 ```
-
 
 # Introduction
 
-This is a analysis about Marriage Licence in different district in Canada, We use @talia, @opendatatorotno, and @rohan.
+Lead contamination in drinking water poses significant public health
+risks, particularly for vulnerable populations such as children and
+pregnant women. Even low levels of lead exposure can have serious health
+consequences, including developmental delays and cognitive impairments.
+In response to growing concerns about lead exposure, the City of Toronto
+has implemented a non-regulated Residential Lead Testing Program. This
+initiative allows residents to access free water testing services,
+providing them with the means to assess the lead content in their tap
+water.
+
+The testing process is straightforward: residents can obtain a testing
+kit from any of six Toronto Public Health locations, collect a water
+sample from their home, and return it for analysis. Toronto Water
+processes the samples and provides results directly to the residents.
+Although the City cannot control how the samples are collected, this
+service empowers residents to take action in ensuring the safety of
+their drinking water. This paper will explore the benefits of the
+program, its limitations, and the broader efforts undertaken by the City
+of Toronto to address lead contamination in its water supply system.
+
+We use @talia, @opendatatorotno, and @rohan.
 
 The remainder of this paper is structured as follows. @sec-mydatasection
 
-
-
 # Data {#sec-mydatasection}
 
-Some of our data is of penguins (@fig-marriage), from @palmerpenguins.
 
 ```{r}
-#| label: fig-marriage
-#| fig-cap: Bills of penguins
+#| label: table1summary
+#| fig-cap: "Table 1: Summary of the lead amount in ppm"
 #| echo: false
+summary(data$`Lead Amount (ppm)`)
+```
 
-data |> 
-  ggplot(aes(x = date, y = marriage_licenses)) +
-  geom_point()
+```{r}
+#| label: figure1boxplot
+#| fig-cap: "Figure 1: summary of the lead amount in ppm"
+#| echo: false
+boxplot(data$`Lead Amount (ppm)`)
+abline(h = 0.010011423, col = "red")
+```
+
+```{r}
+#| echo: false
+threshold <- 0.010011423
+below = data$`Lead Amount (ppm)` < threshold
+sum(below)/10215
 
 ```
 
 
+```{r}
+#| label: figure2ggplot
+#| fig-cap: "Figure 2: Lead Levels changed over time for times seriese analysis"
+#| echo: false
+plot(data$`Sample Date`, data$`Lead Amount (ppm)`, type='l', main="Lead Levels Over Time", xlab="Date", ylab="Lead Amount (ppm)")
+
+```
+
+```{r}
+#| label: figure3ACF
+#| fig-cap: "Figure 3: Autocorrelation function for lead concentrations"
+#| echo: false
+# Autocorrelation function (ACF)
+acf(data$`Lead Amount (ppm)`, na.action = na.omit, main="Autocorrelation of Lead Levels")
+```
+
+```{r}
+#| label: figure4PACF
+#| fig-cap: "Figure 4: Partial Autocorrelation function for lead concentrations"
+#| echo: false
+# Partial Autocorrelation function (PACF)
+pacf(data$`Lead Amount (ppm)`, na.action = na.omit, main="Partial Autocorrelation of Lead Levels")
+
+```
 
 
+```{r}
+#| label: figure5
+#| fig-cap: "Figure 5: Outliers categorized by district"
+#| echo: false
+boxplot(`Lead Amount (ppm)` ~ PartialPostalCode, data=data, main="Lead Levels by Postal Code", xlab="Partial Postal Code", ylab="Lead Amount (ppm)")
 
+```
+
+```{r}
+#| label: figure6
+#| fig-cap: "Figure 6: Mean lead concentration categorized by first two characters in partial postal code"
+#| echo: false
+# Load necessary library
+library(ggplot2)
+
+
+# Remove rows with LeadAmountPPM > 4
+filtered_data <- subset(data, `Lead Amount (ppm)` <= 4)
+
+# Categorize by the first two characters of PartialPostalCode
+filtered_data$District <- substr(filtered_data$PartialPostalCode, 1, 2)
+
+# Step 3: Calculate the mean of LeadAmountPPM by District
+mean_lead_by_district <- aggregate(`Lead Amount (ppm)` ~ District, data = filtered_data, FUN = mean)
+print(mean_lead_by_district)
+# Step 4: Construct a bar graph using ggplot2
+ggplot(mean_lead_by_district, aes(x = District, y = `Lead Amount (ppm)`)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(title = "Mean Lead Concentration by District",
+       x = "District (First Two Characters of Postal Code)",
+       y = "Mean Lead Amount (ppm)") +
+  theme_minimal()
+
+
+```
+
+```{r}
+threshold <- 0.010
+high_lead_samples <- data[data$`Lead Amount (ppm)` > threshold, ]
+
+# Count of samples above the threshold
+nrow(high_lead_samples)
+
+# Percentage of samples above threshold
+(nrow(high_lead_samples) / nrow(data)) * 100
+
+```
 
 # Discussion
 
-## First discussion point {#sec-first-point}
-This is the scatterplot generated by the random sample we selected, this shows an ocsilating trend for marriage licneces
-$[0, 500]_{marraigelicence} \land [2010, 2020]_{date}$ and during 2020 and 2025, there is an increasing number of marraige licences and the scatterplots did not clustered in $[0, 500]_{marraigelicence}$. 
+## Lead Concentration influencing Health
 
-## Second discussion point
-It is safe to assume that the total number of marriages did not vary much, but the average number of licence did increase.
+-   WHO and Canadian federal guidance on lead concentration in water
 
-## Third discussion point
-It is arguable that less people are getting married in the contemporary time.
+
+Lead amount The main variable we are examining is the Lead Amount in
+ppm. The distribution of the data is highly right skewed with most
+of its data being very small, as shown in figure 1(@figure1boxplot),
+most data are almost 0 with some outliers which are mostly less than
+2 ppm and 4 of them ranging from 3 to 8.44 which is the maximum
+value as shown in the summary table(@table1summary). We can also
+verify our observation since the summary(@table1summary) shows that
+75% of the data is below 0.001480. Government of Canada had
+specified that the MAC of drinking water is 0.010mg/L(Government
+Canada), which converts to 0.010011423
+part/million(unitconverters.net), this is shown by the red line in
+the figure 1(@figure1boxplot). 
+
+-   percentage of data above this threshold
+
+
+From calculations, there are 97.26% of the data collected indicatin that the lead amount in the water is safe, and it is safe to assume that 75% of the areas in toronto is
+safe of lead in water.
+
+-   plot of the data above this threshold
+
+## How districts affect Lead Concentration
+
+-   graphs of postal code vs lead concentrations
+
+
+Postal Code Figure 5(@figure5) is a scatterplot of each specific
+partial postal code(first 3 code), we can see that again, most data
+points are around 0, but there are a few outliers with very high
+lead concentration. Figure 5 clarily indicated that which district
+are those outliers in. We can see that the "M4" has two datapoints
+aroun 8 ppm, as well as some between 0 and 2ppm. "M6" also have many
+data between 0 and 2ppm. It is safe to assume that those two district 
+might have a higher overall lead concentration level.
+
+
+-   extract outliers above the threshold
+
+
+We will verify the assumption with calculating the mean lead
+concentration when categorized the partial postal codes by only the
+first two numbers. Since outliers might influence the mean, especially
+when in our dataset we are dealing with median 0.000473 and outliers as
+high as 8ppm, we can omit the outliers above 4ppm and perform the data
+analysis. 
+
+-   mean value of lead concentration for different districts
+
+
+Figure 6(@figure6) is the bargraph comparing the mean values
+of lead concentration without outliers above 4ppm and cetegorized by
+only the first two characters of the partial postal code.
+We can see that the top 3 district of the highest lead concentration in
+water is M9, M6 and M5 respectively. This shows that without the data
+above 4ppm,
+
+-   toronto map
+
+## How months and year affect Lead Concentration
+
+-   times series analysis for autocorrelation
+
+
+Time and Lead In this dataset, we have variables time and lead amount, therefore, we can perform times series analysis(STA457). As shown in figure 2(@figure2ggplot), we can see that except for some sharp increase in 2014, 2019, 2021, 2023, the overall trend is stays
+around 0 and remains positive.
+
+From the ACF and PACF figures, we can conclude that the previous values
+of lead concentrations does not impact future values. For ACF, when lag
+is 0, ACF is always 1 but for all other lags in ACF(@figure3ACF) and
+PACF(@figure4PACF) they are all within the dotted blue lines which is
+the evidence that there are no significant autocorrelation nor
+autoregressive realtionship present in the data.
+
+This observation is reasonable because the samples are collected in
+different district in Toronto, and it is safe to assume that one
+incident of a very high lead concentration might again only be outliers
+instead of some factors that will effect the overall water quality in
+Toronto.
+
+-   graphs of months vs mean lead concentration
+
+-   graphs of years vs mean lead concentration
+
+-   extract outliers above the threshold
 
 ## Weaknesses and next steps
-We need to perform more statistics analysis to make a more valid conclusion, some next steps can be Times Series analysis, regression estimates and visual representations.
 
+-   the data is from many different water source, they are not
+    necessarily direct drinking water since how the water sample
+    collected was not controled. However, the guides are for drinking
+    water.
+
+-   importance of pre-treatment such as filter
 
 \newpage
 
 \appendix
 
-# Appendix {-}
-
+# Appendix {.unnumbered}
 
 # Additional data details
 
-
-
 \newpage
 
-
 # References
-
-

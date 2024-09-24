@@ -1,4 +1,18 @@
-# Marriages in Toronto before and after the pandemic
+# Lead Concentration
+
+# This is the first draft with below modifications
+1. The Introduction is gpt generated, will modify, will include finidings
+2. Fix the bugs for cross-references, not it has ?
+3. remove all R output and organize the information using only ggplot2 and knitr(no summary statistics)
+4. Organize section and table of content when finished
+5. complete citation 
+6. discuss measurement
+7. cite Professor Rohan Alexander
+8. Finish README
+9. use a Rproject
+10. Include map of toronto when explaining postal code
+11. Format the whole paper
+12. Data and measurement section
 
 ## Overview
 
