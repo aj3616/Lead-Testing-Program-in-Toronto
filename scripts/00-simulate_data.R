@@ -39,14 +39,8 @@ data <-
     sample_number = sample_number,
     sample_date = sample_date,
     partial_postal_code = partial_postal_code,
-    dates = as.Date(
-      runif(
-        n = number_of_dates,
-        min = as.numeric(start_date),
-        max = as.numeric(end_date)
-      ),
-      origin = "2014-01-01"
-    ),
+
+    
     # used gamma distibution instead of the poison distribution because the mean_lead is a continuous variable,
     # if we use poisson distibution, all simulations will be 0
     leadAmountppm = rgamma(n = number_of_dates, shape = 2, rate = 1 / mean_lead)
