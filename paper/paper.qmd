@@ -1,12 +1,12 @@
 ---
-title: "Lead Contamination Testing: Is water in Toronto safe for drinking?"
-subtitle: "Water in Some Districts is more Contaminated than others"
+title: "Lead Contamination Testing: Is Water in Toronto Safe for Drinking?"
+subtitle: "Water in Some Districts is More Contaminated Than Others"
 author: 
   - Amy Jin
 thanks: "Code and data are available at: https://github.com/aj3616/Lead-Testing-Program-in-Toronto"
 date: today
 date-format: long
-abstract: "The City of Toronto offers a free, non-regulated Residential Lead Testing Program, where residents collect and submit water samples. This paper examines how time and district affects the lead concentration with respect to safe lead concentration guidelines. Quality of drinking water is an important public health issue, since too much abosorbtion of lead might have detrimental effects especially for young children. It was found that the lead concentration does not have noticeble seasonality or autocorrelation, some areas in toronto tends to have higher lead concentrations than the rest."
+abstract: "The City of Toronto offers a free, non-regulated Residential Lead Testing Program, where residents collect and submit water samples. Quality of drinking water is an important public health issue, since too much abosorbtion of lead might have detrimental effects especially for young children. This paper examines how time and district affects the lead concentration with respect to safe lead concentration guidelines. It was found that the lead concentration does not have noticeble seasonality or autocorrelation, but some areas in toronto tends to have higher lead concentrations than the rest."
 format: pdf
 number-sections: true
 bibliography: references.bib
@@ -39,7 +39,7 @@ blueishgrey <- rgb(96, 139, 182, maxColorValue = 255)
 
 Lead contamination in drinking water poses significant public health
 risks, particularly for vulnerable populations such as children and
-pregnant women(Government Canada). 
+pregnant women(@c-1).
 
 This paper takes in raw data from the City of Toronto(Open Data
 Toronto), where they implemented a non-regulated program called City's
@@ -47,10 +47,9 @@ Residential Lead Testing Program. More information on this program can
 be explored at: www.toronto.ca/leadpipes. The results respond to the
 concerns about lead exposure in the city of Toronto.
 
-While significant research has extensively documented the public health
+While significant research has documented the public health
 impacts of lead exposure, particularly focusing on its toxic effects on
-vulnerable populations like children and pregnant women (Levallois et
-al., 2018)(Jarvis & Fawell, 2021), a critical gap remains in
+vulnerable populations like children and pregnant women (@levallois2018public)(@jarvis2021lead), a critical gap remains in
 understanding how lead concentrations in urban drinking water systems
 fluctuate both spatially and temporally.
 
@@ -64,93 +63,142 @@ specific time intervals, and no significant autocorrelation, which
 indicates a lack of correlation between current and past lead
 concentrations. In other words, future lead concentrations do not depend
 on previous lead levels, and there is insufficient evidence to suggest
-that certain months consistently exhibit higher trends of lead
-concentrations compared to others.
+that certain months or years consistently have higher trends of lead
+concentrations.
 
-However, some district does have higher trend of lead concentration.
-There are clusters of outliers within some specific district and some
-district have higher mean lead concentrations than other. It is safe to
+However, some districts do have higher trend of lead concentration.
+There are clusters of outliers within some specific districts and some
+districts have higher mean lead concentrations than others. It is safe to
 say that geographic locations and community water maintenance have an
 effect on water safety.
 
-This topic is important because even low levels of lead exposure can
+This topic is significant because even low levels of lead exposure can
 have serious health consequences, including developmental delays,
-cognitive impairments and even detrimental effects(Government Canada).
+cognitive impairments and even detrimental effects(@c-1).
 
-We use @talia for data analysis, @opendatatorotno for collected data
-set, and @rohan for directions and template.
+@talia is used for data analysis, @opendatatorotno for collected data
+set, and @alexander2023telling for instructions and template.
 
 The remainder of this paper is structured as follows. @sec-mydatasection
-Data, further explains the data set we are working with and the
-prepossessing done for further analysis. A discussion with the
-measurement used when collecting the data is also included. Graphs and
-tables were used to show important features of the data set.
-@sec-mydiscussion Discussion, talks about, firstly, to what extent will
+Data, provides a detailed explanation of the data set working with and the prepossessing done for further analysis. A discussion with the
+measurement used when collecting the data is also included in @sec-measurement. Graphs and tables were used to emphasis the importance of the features in the data set.
+@sec-mydiscussion Discussion, covers, @sec-health, to what extent will
 Lead Concentration influence Health and how much concentration will be
-categorized as “dangerous”. Secondly, the paper went into a detailed
+categorized as “dangerous”. In @sec-district, the paper went into a detailed
 analysis of how districts affect lead concentration. Graphs and outliers
-analysis was used to present the result. Thirdly, the paper performs
+analysis was used to present the result. Thirdly in @sec-time, the paper performs
 Times Series analysis to analyze the lead concentration over time.
-Lastly, there is a subsection discussing weakness of the paper and some
+Lastly, @sec-future discussed weakness of the paper and some
 further steps to further support the question.
 
 # Data {#sec-mydatasection}
 
 ## Tools Used
 
-#TODO: change library citation R (R Core Team 2023) was used for the
-data analysis and the productions of all graphs and tables. The
-libraries tidyverse (Wickham et al. 2019), here (J. B. Kirill Müller
-2020), dplyr (Hadley Wickham 2023), tibble (R. F. Kirill Müller Hadley
-Wickham 2023), janitor (Sam Firke 2023), ggplot2 (Wickham 2016), and
-knitr (Xie 2023) were also used for organizing data and performing
-analysis.
+R (R Core Team 2023) was used for the data analysis and the productions of all graphs and tables. The libraries: tidyverse (@o), dplyr (Hadley Wickham 2023), ggplot2 (@ggplot2), gt(@gt) , lubridtate(@lubridate), tidyr(@tidyr), and knitr (@knitr) were also used for organizing data and performing analysis.
 
 ## Data Set and Context
-The data set "Non Regulated Lead Sample" by Open Data Toronto is to
+The data set "Non Regulated Lead Sample" by Open Data Toronto aims to
 address the concerns Toronto residents have for their drinking water.
 The data set contains information on lead concentrations in water
-samples. Each row is from a water sample, with corresponding information
+samples. Each row represents a water sample, with corresponding information
 on the date, partial postal code where the sample was provided, and the
 main variable of interest, lead concentration in parts per million
 (ppm).
 
-Lead exposure is an important public health issue. High levels of lead
+Lead exposure is an significant public health issue. High levels of lead
 in drinking water can pose severe health risks, particularly to
-vulnerable populations.(WHO) Chronic exposure to lead can result in
-developmental delays, neurological damage, and a range of other health
-problems.(WHO) Tracking lead concentrations in water is crucial for
+vulnerable populations.(@w) Chronic exposure to lead can result in
+developmental delays, neurological damage, and varous of other health
+problems.(@w) Monitoring lead concentrations in water is crucial for
 ensuring safe water quality and identifying areas requiring intervention
 to effectively manage health risks.
 
-There are similar similar data sets that addresses the problem of hard
-water contamination. One example is in state of Michigan, USA, MIDHHS
+There are similar data sets that address the problem of hard
+water contamination. One example is from state of Michigan, USA, MIDHHS
 collected similar sample with months, years and lead
-concentrations(MIDHHS). There are also other data set that analyze a
-different metal in water. However, this data set is used because lead is
-a very common metal in hard water with severe damage to public health
-when overdose, and being a resident in city of Toronto, this should be a
-concern that needs attention.
+concentrations(@m). Other data setanalyze the
+different metals in water. However, this data set was chosen because lead is
+a common metal in hard water with severe damage to public health
+when overdose, and being a resident in city of Toronto, this is a
+concern that needs to raise attention .
 
 ## Variables
 
-There are five variables in total: \_id, Sample Number, Sample Date,
+The five variables in this paper: \_id, Sample Number, Sample Date,
 PartialPostalCode and Lead Amount. While the first two are keys of this
-data set for identification purpose, the rest are our variable of
-interest:
+data set for identification purpose, the remaining varaiables are of our interest to our analysis:
 
 **Date**: Represents the date on which the water sample was collected,
-can be used to detect trends and seasonal variations.
+can be used to detect trends and seasonal variations. It is evident from (@fig-showdate) that the data points are evenly distributed through time except during 2020, there is an empty period of time. This might be caused by COVID-19 quarantine, where the residence does not have the chance to volunteer their water sample.
+```{r}
+#| label: fig-showdate
+#| fig-cap: "Graph of Dates Categorized by Year and Presented by Each Months"
+#| echo: false
+# Create a new data frame with extracted year and month
+data_date <- data %>%
+  transmute(
+    Year = year(`Sample Date`),
+    Month = month(`Sample Date`, label = TRUE, abbr = TRUE)
+  )
+
+# Plot with ggplot2
+ggplot(data_date, aes(x = Year, y = Month)) +
+  geom_jitter(width = 0.2, height = 0.2, color = blueishgrey, size = 3) + # Add jitter to separate points
+  labs(title = "Distribution of Sample Dates by Year and Month",
+       x = "Year",
+       y = "Month") +
+  theme_minimal()
+
+```
+
 
 **Partial Postal Code:** A truncated form of the postal code indicating
 the general area where the water sample was taken, can be used to
-identify potential geographical clusters.
+identify potential geographical clusters. The (@fig-splitpostal) shows the partial postal code categorized by the first two characters and the y axis being the last character ranging from A-Z. It can be oberseved from (@fig-splitpostal) that the data points are not evenly distributed. This can be caused by sampling bias since it is a volunterring sampling but it can also be caused by the fact that some areas in City of Toronto are not present for residency.
+```{r}
+#| label: fig-splitpostal
+#| fig-cap: "Graph of Partial Postal Code Splitting into First Two Characters and Last Character"
+#| echo: false
+
+# Create a new data frame with extracted components
+data_postal <- data %>%
+  transmute(
+    FirstTwoChars = substr(district, 1, 2),
+    LastChar = substr(district, 3, 3)
+  )
+
+# Plot the extracted components using ggplot2
+ggplot(data_postal, aes(x = FirstTwoChars, y = LastChar)) +
+  geom_jitter(width = 0.2, height = 0.2, color = blueishgrey, size = 3) + # Jitter points to spread them out for better visualization
+  labs(title = "Relationship Between First Two and Last Characters of Postal Codes",
+       x = "First Two Characters",
+       y = "Last Character") +
+  theme_minimal()
+
+```
 
 **Lead Concentration (ppm):** The measured amount of lead in the water
-sample, expressed in parts per million. This is the primary variable of
+sample, expressed in parts per million(@fig-boxplot). This is the primary variable of
 interest, as it directly relates to public health risks associated with
-lead exposure. We can also further analyze combinations of lead
-concentration with other variables.
+lead exposure.Additionally,     combinations of lead concentration with other variables can be furthur analyzed.
+```{r}
+#| label: fig-boxplot
+#| fig-cap: "Boxplot showing the lead concentration above the saftey threshold"
+#| echo: false
+
+# Set the threshold value for the horizontal line
+threshold_value <- 0.010011423
+
+# Create the boxplot using ggplot2
+ggplot(data, aes(y = `Lead Amount (ppm)`)) +
+  geom_boxplot(fill = "skyblue") +
+  geom_hline(yintercept = threshold_value, color = "red", linetype = "dashed") +
+  labs(title = "Boxplot of Lead Amount (ppm) with Threshold Line",
+       y = "Lead Amount (ppm)") +
+  theme_minimal()
+
+```
 
 Other than the given variables, there are three additional variables
 constructed during analysis: Months: Extracted from the Date variable to
@@ -179,18 +227,18 @@ covering over a decade of water sampling data.
 the city of Toronto based on the first two characters of the Partial
 Postal Code.
 
+
 **Lead Concentration(num):** A num type, which represents the summary
 statistics of lead concentration typically include measures like the
 minimum, maximum, mean, median, and standard deviation of lead levels
 across the data set.
 
 ## Summary
-Table 1 is a summary table for num type variable lead amount. We can see that the minimum and maximum value differs by 168,800 times, which is very significant. Therefore, we can assume that there are water samples that are very clean in terms of lead concentration and there are samples that are contaminated. We can also see that the mean and median differs a lot. Which means that the distribution of this data set is highly right skewed. It also shows evidence that there are many outliers that will elevated mean lead concentration level in this data set.
-
+A summary table(@tbl-summary) for num type variable lead amount.It is evident that the minimum and maximum value differs by 168,800 times, which is very significant. In (@gif-boxplot), it is evident that there are many outliers. Therefore, the assumption can be made that there are water samples that are very clean in terms of lead concentration and there are samples that are contaminated. It is clear that the mean and median differs a lot. Which means that the distribution of this data set is highly right skewed. The outliers will elevated mean lead concentration level in this data set.
 
 ```{r, echo=FALSE}
 #| label: tbl-summary
-#| tbl-cap: "Distribution Statistics Measurements of Lead Amount"
+#| tbl-cap: "Distribution Statistics Measurements of Lead Amount in ppm"
 #| echo: false
 # Example summary statistics
 lead_summary <- summary(data$`Lead Amount (ppm)`)
@@ -242,8 +290,8 @@ such as a decrease in lead levels due to policy interventions, can be
 detected.
 
 
-## Measurement
-In this dataset, we are interested in the concentration of lead in drinking water across different regions of a city and over time. The measurement process transforms a real-world phenomenon—lead contamination in water—into quantitative entries in a dataset that can be analyzed for trends. 
+## Measurement{#sec-measurement}
+In this dataset, the aim is to explore in the concentration of lead in drinking water across different regions of a city and over time. The measurement process transforms a real-world phenomenon—lead contamination in water—into quantitative entries in a dataset that can be analyzed for trends. 
 
 **Lead concentration:** Measured in parts per million (ppm), indicating the amount of lead in the water relative to its volume. This choice of unit is small enough to capture low but potentially harmful concentrations and is standard in water quality testing. This transformation from the chemical presence of lead to a numeric value is a key aspect of measurement.
 
@@ -257,46 +305,29 @@ Choices about measurement such as the instruments used, units of measurement, an
 
 # Discussion {#sec-mydiscussion}
 
-## Lead Concentration influencing Health
+## Lead Concentration influencing Health{#sec-health}
 
 ### WHO and Canadian federal guidance on lead concentration in water
 
-The main variable we are examining is the Lead Amount in
+The main variable examining in this paper is the Lead Amount in
 ppm. The distribution of the data is highly right skewed with most of
 its data being very small, as shown in (@fig-boxplot), most
 data are almost 0 with outliers which are mostly less than 2 ppm
 and 4 of them ranging from 3 to 8.44 which is the maximum value as shown
-in the summary Table 1. We can also verify our observation
+in the summary Table 1. Additionally observation can be verified
 since the summary Table 1 shows that 75% of the data is below
 0.001480. Government of Canada had specified that the maximum acceptable concentration (MAC) of drinking
-water is 0.010mg/L(Government Canada), which converts to 0.010011423
-part/million(unitconverters.net), this is shown by the red line in the
+water is 0.010mg/L(@c-1), which converts to 0.010011423
+part/million(@c), this is shown by the red line in the
 figure 1(@fig-boxplot).
-```{r}
-#| label: fig-boxplot
-#| fig-cap: Boxplot showing the lead concentration above the saftey threshold
-#| echo: false
-
-# Set the threshold value for the horizontal line
-threshold_value <- 0.010011423
-
-# Create the boxplot using ggplot2
-ggplot(data, aes(y = `Lead Amount (ppm)`)) +
-  geom_boxplot(fill = "skyblue") +
-  geom_hline(yintercept = threshold_value, color = "red", linetype = "dashed") +
-  labs(title = "Boxplot of Lead Amount (ppm) with Threshold Line",
-       y = "Lead Amount (ppm)") +
-  theme_minimal()
-
-```
 
 ### Percentage of data above this threshold
 
 From calculations by R, there are 97.26% of the data collected indicating that
-the lead amount in the water is safe. As shown in (@tbl-threshold), there are only 280 counts of water sample collected that is above MAC, which takes up only 2.74% of the whole data set. Even though this seems like a good result, those 280 measurements still effects people and their family's health since those lead concentrations will have negative effect on health(WHO)(Canadian Government).
+the lead amount in the water is safe. As shown in (@tbl-threshold), there are only 280 counts of water sample collected that is above MAC, which takes up only 2.74% of the whole data set. Even though this seems like a good result, those 280 measurements still effects people and their family's health since those lead concentrations will have negative effect on health(@w)(@c-1).
 ```{r, echo=FALSE}
 #| label: tbl-threshold
-#| tbl-cap: "Number and Percentage of data above MAC"
+#| tbl-cap: "Number and Percentage of data above Maximum Acceptable Concentration"
 #| echo: false
 # Define the threshold
 threshold <- 0.010
@@ -329,11 +360,11 @@ summary_table %>%
 ```
 
 ### plot of the data above this threshold
-To visualize those data above MAC, data below MAC and above 2 were filtered out, because from (@fig-boxplot), we can see that there are only 4 data points above 2, therefore, with that in mind it is safe to temporarily ignore to get a scale that will better show the most data points above MAC. A scatterplot was used with x axis being date and y axis being lead concentration give a graph that spreads out lead concentrations instead of on a 1-dimensional line. From (@fig-between) we can see that there are clusters of data points below 0.25 and for higher lead concentrations, there are less data points and more spread out than those below 0.25.
+To visualize those data above MAC, data below MAC and above 2 were filtered out, because from (@fig-boxplot), it is clear that there are only 4 data points above 2, therefore, with that in mind it is safe to temporarily ignore to get a scale that will better show the most data points above MAC. A scatterplot was used with x axis being date and y axis being lead concentration give a graph that spreads out lead concentrations instead of on a 1-dimensional line. From (@fig-between) this indicates that there are clusters of data points below 0.25 and for higher lead concentrations, there are less data points and more spread out than those below 0.25.
 
 ```{r}
 #| label: fig-between
-#| fig-cap: "Data between 2 and MAC representing with Date"
+#| fig-cap: "Data Between 2ppm and Maximum Acceptable Concentration Representing By Date"
 #| echo: false
 # Define the threshold value
 threshold <- 0.010011423
@@ -353,16 +384,16 @@ ggplot(data_above_threshold, aes(x = `Sample Date`, y = `Lead Amount (ppm)`)) +
 
 ```
 
-## How districts affect Lead Concentration
+## How districts affect Lead Concentration{#sec-district}
 
 ### graphs of postal code vs lead concentrations
 
-Nine boxplot (@fig-boxplotdistrict) each representing a district, which is the constructed variable from the first two letters of partial postal code. Again, most data points are around 0, and the outliers streched the scale so that this way we can easily analyze the outliers. The districts containing outliers were also shown in (@fig-boxplotdistrict). We can see that the "M4" has two data points above 8 ppm, as
+Nine boxplot (@fig-boxplotdistrict) each representing a district, which is the constructed variable from the first two letters of partial postal code. Again, most data points are around 0, and the outliers streched the scale so that this way we can easily analyze the outliers. The districts containing outliers were also shown in (@fig-boxplotdistrict). It is clear that the "M4" has two data points above 8 ppm, as
 well as a cluster between 0 and 1 ppm. "M6" also have many data between 0 and
 2ppm. It is safe to assume that these two districts have water sources with high lead concentrations.
 ```{r}
 #| label: fig-boxplotdistrict
-#| fig-cap: "Boxplot Showing Outliers categorized by district"
+#| fig-cap: "Boxplot Showing Outliers Categorized by District"
 #| echo: false
 
 
@@ -392,7 +423,7 @@ ggplot(data_district, aes(x = District, y = lead)) +
 
 ### extract outliers above the threshold
 
-We will verify which district have a higher overall lead concentration by calculating the mean lead concentration when still categorize the partial postal codes by only the
+Verification will be conducted which district have a higher overall lead concentration by calculating the mean lead concentration when still categorize the partial postal codes by only the
 first two numbers. Since outliers might influence the mean, especially
 when in our dataset we are dealing with median 0.000473 and outliers as
 high as 8ppm, the outliers above 2 ppm were omitted before caculating the mean lead concentration.
@@ -401,12 +432,12 @@ high as 8ppm, the outliers above 2 ppm were omitted before caculating the mean l
 
 The bargraph (@fig-meandistrict) compares the mean values of lead
 concentration without outliers above 2 ppm and categorized by only the
-first two characters of the partial postal code. We can see that the top
+first two characters of the partial postal code. It is evident that the top
 two district of the highest lead concentration in water is M9 and M6 respectively. This shows that without the data above 2 ppm, M4 does not have a overall high lead concentration, but only some very high outliers. However, M9 and M6 will be the two most dangerous district in Toronto in terms of lead concentration in water. Even though all the mean values shown in (@tbl-meandistrict) are all below MAC by Canadian Government, the M9 and M6 district might need more attention in the topic of water saftey given that the rest districts perform better especially M8.
 
 ```{r}
 #| label: tbl-meandistrict
-#| tbl-cap: "Specific Numbers of the mean for each district"
+#| tbl-cap: "Specific Numbers of the Mean Lead Concentration for each District"
 #| echo: false
 
 
@@ -436,10 +467,10 @@ mean_lead_by_district %>%
   )
 
 ```
-
+\newpage
 ```{r}
 #| label: fig-meandistrict
-#| fig-cap: "Mean lead concentration categorized by first two characters in partial postal code"
+#| fig-cap: "Mean Lead Concentration Categorized by First Two Characters from Partial Postal Code"
 #| echo: false
 # Step 4: Construct a bar graph using ggplot2
 ggplot(mean_lead_by_district, aes(x = District, y = `Lead Amount (ppm)`)) +
@@ -451,17 +482,17 @@ ggplot(mean_lead_by_district, aes(x = District, y = `Lead Amount (ppm)`)) +
 ```
 
 
-## How months and year affect Lead Concentration
+## How months and year affect Lead Concentration{#sec-time}
 
 ### Times Series analysis for autocorrelation{#sec-timeseries}
 
-In this dataset, we have variables time and lead amount,
-therefore, we can perform times series analysis. As shown in
-(@fig-timeseries), we can see that except for some sharp increase
+In this dataset, the variables are time and lead amount,
+therefore,times series analysis can be performed. As shown in
+(@fig-timeseries), it is evident that except for some sharp increase
 in 2014, 2019, 2021, 2023, the overall trend is stays around 0 and
 remains positive. There are no increasing or decreasing trend overtime and no obvious seasonality present.
 
-From the ACF and PACF figures, we can conclude that the previous values
+From the ACF and PACF figures, it can be concluded that the previous values
 of lead concentrations does not impact future values. For ACF, when lag
 is 0, ACF is always 1 but for all other lags in ACF(@fig-ACF) and
 PACF(@fig-PACF) they are all within the dotted blue lines which is
@@ -473,11 +504,11 @@ incident of a very high lead concentration might again only be outliers
 instead of due some factors that will effect the overall water quality in
 Toronto. 
 
-Lead Concentration in water can vary overtime(WHO), therefore the high lead concentration outliers might not be caused by correlation instead, "a probability-based adaptive sampling plan should be used to access exposure(WHO)".
+Lead Concentration in water can vary overtime(@w), therefore the high lead concentration outliers might not be caused by correlation instead, "a probability-based adaptive sampling plan should be used to access exposure(@w)".
 
 ```{r}
 #| label: fig-timeseries
-#| fig-cap: "Lead Levels changed over time for times seriese analysis"
+#| fig-cap: "Lead Levels Changed Over Time for Times Series Analysis"
 #| echo: false
 
 # Create a line plot using ggplot2
@@ -493,7 +524,7 @@ ggplot(data, aes(x = `Sample Date`, y = `Lead Amount (ppm)`)) +
 
 ```{r}
 #| label: fig-ACF
-#| fig-cap: "Autocorrelation function for lead concentrations"
+#| fig-cap: "Autocorrelation Function for Lead Concentrations"
 #| echo: false
 # Autocorrelation function (ACF)
 # Calculate ACF (autocorrelation function)
@@ -523,7 +554,7 @@ ggplot(acf_data, aes(x = Lag, y = ACF)) +
 
 ```{r}
 #| label: fig-PACF
-#| fig-cap: "Partial Autocorrelation function for lead concentrations"
+#| fig-cap: "Partial Autocorrelation Function for Lead Concentrations"
 #| echo: false
 # Partial Autocorrelation function (PACF)
 pacf = pacf(data$`Lead Amount (ppm)`, na.action = na.omit, main="Partial Autocorrelation of Lead Levels")
@@ -532,10 +563,10 @@ pacf = pacf(data$`Lead Amount (ppm)`, na.action = na.omit, main="Partial Autocor
 ```
 
 ### graphs of months vs mean lead concentration
-With all data points, we do not see obvious trends over time. Here we examine closely for the constructed variable month from Date. (@fig-month) is the boxplot showing the outliers, but there are not enough evidence to show that there are specific month that will have a higher lead concentration. Therefore, we perform a similar filtering on data that is larger than 2 ppm.
+With all data points, there are no obvious trends over time. The examination is made closely for the constructed variable month from Date. (@fig-month) is the boxplot showing the outliers, but there are not enough evidence to show that there are specific month that will have a higher lead concentration. Therefore, a similar filtering is applied to data larger than 2 ppm.
 ```{r}
 #| label: fig-month
-#| fig-cap: "Boxplots that shows the outliers categorized by Months"
+#| fig-cap: "Boxplots that Shows the Outliers Categorized by Months"
 #| echo: false
 # Extract month as a factor for visualization
 data_by_month <- data %>%
@@ -556,12 +587,12 @@ ggplot(data_by_month, aes(x = Month, y = `Lead Amount (ppm)`)) +
 
 ```
 
-Bar graph (@fig-meanmonth) shows the mean lead concentration for each month in the year. April and September has higher lead concentrations that is about 500% of the other months. However, this graph does not provide enough evidence to prove seasonality. We need we examine whether April and September for every year will repeatedly have higher measured lead concentration. This will be further discussed in @sec-future.
+Bar graph (@fig-meanmonth) shows the mean lead concentration for each month in the year. April and September has higher lead concentrations that is about 500% of the other months. However, this graph does not provide enough evidence to prove seasonality. It is necessary to examine whether April and September for every year will repeatedly have higher measured lead concentration. This will be further discussed in @sec-future.
 
 
 ```{r}
 #| label: fig-meanmonth
-#| fig-cap: "Mean Lead Concentration Without Data Greater than 2 ppm categorized by Months"
+#| fig-cap: "Mean Lead Concentration Without Data Greater than 2 ppm Categorized by Months"
 #| echo: false
 # Extract month and calculate mean lead concentration by month
 mean_lead_by_month <- data %>%
@@ -585,10 +616,10 @@ ggplot(mean_lead_by_month, aes(x = Month, y = mean_lead)) +
 ```
 
 ### graphs of years vs mean lead concentration
-Similar to months, we also constructed a variable call year. However, both the boxplots and the mean values without data below 2 ppm does not show trend from year to year. This aligns with our conclusion in @sec-timeseries.
+Similar to months,variable called year was also constructed. However, both the boxplots and the mean values without data below 2 ppm does not show trend from year to year. This aligns with our conclusion in @sec-timeseries.
 ```{r}
 #| label: fig-year
-#| fig-cap: "Boxplots that shows the outliers categorized by Year"
+#| fig-cap: "Boxplots that Shows the Outliers Categorized by Year"
 #| echo: false
 # Create a new data frame with the extracted year
 data_by_year <- data.frame(
